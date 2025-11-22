@@ -1,7 +1,7 @@
 name: Manual Python Script Run
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:   # Only runs when you click "Run workflow"
 
 jobs:
   run-script:
@@ -18,13 +18,12 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Export secrets
+      - name: Run main.py
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
         run: |
-          echo "GMAIL_USER=${{ secrets.GMAIL_USER }}" >> $GITHUB_ENV
-          echo "GMAIL_APP_PASSWORD=${{ secrets.GMAIL_APP_PASSWORD }}" >> $GITHUB_ENV
-
-      - name: Run your script
-        run: |
-          python your_script.py
+          python main.py
